@@ -3,7 +3,7 @@ import CustomCard from "./CustomCard.jsx";
 import CustomTable from "./CustomTable.jsx";
 import CustomModal from "./CustomModal.jsx";
 import CustomButton from "./CustomButton.jsx";
-import axios from "axios";
+import axios from "../../api/axios"; // ✅ Updated import
 import { toast } from "react-toastify";
 import {
   Box,
@@ -46,7 +46,7 @@ const TodoApp = () => {
   useEffect(() => {
     if (user) {
       axios
-        .get("http://localhost:5000/api/todos", axiosConfig)
+        .get("/api/todos", axiosConfig) // ✅ Removed hardcoded URL
         .then((res) => setTodos(res.data))
         .catch((err) => console.error(err));
     }
@@ -63,7 +63,7 @@ const TodoApp = () => {
   const handleSubmit = () => {
     axios
       .post(
-        "http://localhost:5000/api/todos",
+        "/api/todos", // ✅ Removed hardcoded URL
         {
           title: todoTitle,
           description: todoDescription,
@@ -87,7 +87,7 @@ const TodoApp = () => {
   const handleEditSubmit = () => {
     axios
       .put(
-        `http://localhost:5000/api/todos/${editTodoId}`,
+        `/api/todos/${editTodoId}`, // ✅ Removed hardcoded URL
         {
           title: todoTitle,
           description: todoDescription,
@@ -110,7 +110,7 @@ const TodoApp = () => {
   // Delete Todo
   const deleteTodo = (id) => {
     axios
-      .delete(`http://localhost:5000/api/todos/${id}`, axiosConfig)
+      .delete(`/api/todos/${id}`, axiosConfig) // ✅ Removed hardcoded URL
       .then(() => {
         setTodos(todos.filter((todo) => todo._id !== id));
         toast.info("Todo deleted successfully!");
@@ -121,7 +121,7 @@ const TodoApp = () => {
   // Toggle complete
   const toggleComplete = (id) => {
     axios
-      .patch(`http://localhost:5000/api/todos/${id}/toggle`, {}, axiosConfig)
+      .patch(`/api/todos/${id}/toggle`, {}, axiosConfig) // ✅ Removed hardcoded URL
       .then((res) => {
         setTodos(todos.map((todo) => (todo._id === id ? res.data : todo)));
         toast.success(

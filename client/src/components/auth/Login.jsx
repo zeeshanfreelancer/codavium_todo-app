@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "./AuthForm";
-import axios from "axios";
+import axios from "../../api/axios"; // <-- using centralized axios
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
     setError("");
 
     try {
-      const { data } = await axios.post("http://localhost:5000/api/auth/login", {
+      const { data } = await axios.post("/api/auth/login", {
         email,
         password, // plain password sent securely over HTTPS
       });

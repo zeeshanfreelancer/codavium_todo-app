@@ -1,3 +1,4 @@
+// server/server.js
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -9,10 +10,27 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',')
+  : ['*'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+
+
 app.use(express.json());
 
-// Connect to MongoDB
+// Connect to MongoDB (cached for serverless)
 connectDB();
 
 // Routes
@@ -20,17 +38,8 @@ app.get('/', (req, res) => {
     res.send('Server is running!');
 });
 
-app.use('/api/auth', require('./routes/authRoutes')); // Authentication routes
-app.use('/api/todos', require('./routes/todoRoutes')); // Todo routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/todos', require('./routes/todoRoutes'));
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, (err) => {
-    if (err) {
-        console.error('❌ Server failed to start:', err);
-    } else {
-        console.log(`✅ Server is running on http://localhost:${PORT}`);
-    }
-});
-
+// Export app for Vercel
 module.exports = app;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import { Link } from "@mui/material";
-import axios from "axios";
+import axios from "../../api/axios"; // <-- using centralized axios
 import { toast } from "react-toastify";
 
 const Register = () => {
@@ -32,7 +32,7 @@ const Register = () => {
 
     try {
       // Send plain password (HTTPS encrypts during transmission)
-      const { data } = await axios.post("http://localhost:5000/api/auth/register", {
+      const { data } = await axios.post("api/auth/register", {
         name,
         email,
         password,
