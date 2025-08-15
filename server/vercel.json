@@ -3,7 +3,7 @@
   "builds": [
     {
       "src": "api/index.js",
-      "use": "@vercel/node@4.2.0",
+      "use": "@vercel/node@5.3.12",
       "config": { 
         "runtime": "nodejs18.x",
         "memory": 1024,
